@@ -1,0 +1,94 @@
+<?php
+
+require_once(dirname(__DIR__).DIRECTORY_SEPARATOR."Core".DIRECTORY_SEPARATOR."Autoloader.php");
+
+use App\Bin\tools\ControllerManagement;
+use App\Bin\tools\ViewManagement;
+
+function showInstruction($msg){
+	echo "\t\e[0;31;40m".$msg."\e[0m\n";
+	echo "\tconsole {action} {type} {name}";
+	echo "\n\taction -------";
+	echo "\n\t  |__ + create";
+	echo "\n\t  |__ + update";
+	echo "\n\t  |__ + del";
+	echo "\n\tType -------";
+	echo "\n\t  |__ + View";
+	echo "\n\t  |__ + Controller";
+	die("\n");
+}
+
+if(count($argv)<2){
+	showInstruction("Fatal Eroor: missing argument ...\n");
+}
+
+switch (strtolower($argv[1])) {
+	case 'create':
+		switch (strtolower($argv[2])) {
+			case 'controller':
+				$name = ucfirst($argv[3]);
+				$controllerManagement = new ControllerManagement($name);
+				if($controllerManagement->run()) echo "Controller Added\n";
+					else echo "Controller has already exist !!\n";
+				break;
+
+			case 'view':
+				$name = ucfirst($argv[3]);
+				$viewManagement = new ViewManagement($name);
+				if($viewManagement->run()) echo "View Added";
+					else echo "View has already exist !!\n";
+				break;
+
+			default:
+				showInstruction("Type for created inconnue\n");
+				break;
+		}
+		break;
+	case 'update':
+		break;
+	case 'del':
+		break;
+	default:
+		showInstruction("Action Inconnue ...");
+		break;
+}
+
+
+// create controller controllerName
+// create view viewName
+// update controller lastControllerName newControllerName
+// update view lastViewName newViewName
+// del controller controllerName
+// del view viewName
+
+
+/*
+
+if($argv[1] == "debug:route"){
+	define("ROUTE", dirname(__DIR__).DIRECTORY_SEPARATOR."Core".DIRECTORY_SEPARATOR."Mapping".DIRECTORY_SEPARATOR."Routes.json");
+	define("CONTROLLER_FILE", CONTROLLER."*Controller.php");
+	if(file_exists(ROUTE)){
+		$jsonLoaded = loadJson(ROUTE);
+		//print_r($jsonLoaded);
+	}
+
+	foreach (glob(CONTROLLER_FILE) as  $value) {
+		$className =  "App\Controller\\".basename($value, ".php");
+		echo (new \ReflectionClass($className))->getNamespaceName()."\n";
+		echo (new \ReflectionClass($className))->getParentClass()."\n";
+		$methods = (new \ReflectionClass($className))->getMethods(\ReflectionMethod::IS_PUBLIC);
+		print_r($methods);
+		foreach ($methods as $method) {
+			echo $method->getDocComment();
+		}
+
+	}
+	//$jsonInit = initJson();
+
+}
+
+function loadJson($path){
+	return json_decode(file_get_contents($path));
+}
+*/
+?>
